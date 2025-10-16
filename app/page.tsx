@@ -20,7 +20,7 @@ export default function App() {
 
 
   function listTodos() {
-    client.models.Todo.query({}).then((data) => {
+    client.models.Todo.list({}).then((data) => {
       setTodos(data.data || []);
     });
   }
