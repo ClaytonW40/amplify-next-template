@@ -28,8 +28,9 @@ export default function App() {
 
 
     
-  function deleteTodo(id: string) {
-    client.models.Todo.delete({ id })
+  async function deleteTodo(id: string) {
+    await client.models.Todo.delete({ id });
+    listTodos();
   }
 
   useEffect(() => {
