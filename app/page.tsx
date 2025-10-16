@@ -37,10 +37,12 @@ export default function App() {
     listTodos();
   }, []);
 
-  function createTodo() {
-    client.models.Todo.create({
-      content: window.prompt("Todo content"),
-    });
+  async function createTodo() {
+    const content = window.prompt("Todo content");
+    if (!content) return;
+
+    await client.models.Todo.create({ content });
+    listTodos();
   }
 
   return (
