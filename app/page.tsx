@@ -1,5 +1,6 @@
 "use client";
 import { useEffect, useState } from "react";
+import Link from "next/link"; // ✅ import Link for navigation
 import type { Pokemon, Move } from "../components/pokemon";
 import { checkEffectiveness, Effectiveness } from "../components/checkEffectiveness";
 
@@ -18,31 +19,26 @@ export default function GamePage() {
 
   // helper: randomize new round
   const newRound = async () => {
-    // reset state
     setChoice(null);
     setResult(null);
     setRevealMoveType(false);
     setRevealDefTypes(false);
 
-    // fetch random Pokémon
-    const randomId = Math.floor(Math.random() * 151) + 1; // Gen 1
+    const randomId = Math.floor(Math.random() * 151) + 1;
     const pokeRes = await fetch(`https://pokeapi.co/api/v2/pokemon/${randomId}`);
     const pokeData: Pokemon = await pokeRes.json();
     setPokemon(pokeData);
 
-    // fetch random move
-    const randomMoveId = Math.floor(Math.random() * 200) + 1; // first 200 moves
+    const randomMoveId = Math.floor(Math.random() * 200) + 1;
     const moveRes = await fetch(`https://pokeapi.co/api/v2/move/${randomMoveId}`);
     const moveData: Move = await moveRes.json();
     setMove(moveData);
 
-    // fetch damage relations for move type
     const typeRes = await fetch(moveData.type.url);
     const typeData = await typeRes.json();
     setDamageRelations(typeData.damage_relations);
   };
 
-  // initialize first round
   useEffect(() => {
     newRound();
   }, []);
@@ -55,12 +51,10 @@ export default function GamePage() {
     const effectiveness = checkEffectiveness(defendingTypes, damageRelations);
     setResult(effectiveness);
 
-    // update score
     if (value === effectiveness) {
       setScore((prev) => prev + 1);
     }
 
-    // start new round after short delay
     setTimeout(() => {
       newRound();
     }, 1500);
@@ -69,7 +63,14 @@ export default function GamePage() {
   return (
     <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100">
       <h1 className="text-3xl font-bold mb-4">Pokémon Type Effectiveness Game</h1>
-      <p className="mb-6 text-xl">Score: <strong>{score}</strong></p>
+      <p className="mb-2 text-xl">Score: <strong>{score}</strong></p>
+
+      {/* ✅ New navigation button */}
+      <Link href="/pokedex">
+        <button className="mb-6 px-4 py-2 bg-purple-500 text-white rounded hover:bg-purple-600">
+          Go to Pokédex
+        </button>
+      </Link>
 
       {pokemon && move ? (
         <div className="bg-white shadow-md rounded p-6 mb-4 text-center">
@@ -82,12 +83,10 @@ export default function GamePage() {
             Defending Pokémon: <strong className="capitalize">{pokemon.name}</strong>
           </p>
 
-          {/* Attacking move name always shown */}
           <p className="text-lg">
             Attacking Move: <strong className="capitalize">{move.name}</strong>
           </p>
 
-          {/* Move type hidden until revealed */}
           {revealMoveType ? (
             <p className="text-lg">Move Type: <strong>{move.type.name}</strong></p>
           ) : (
@@ -99,7 +98,6 @@ export default function GamePage() {
             </button>
           )}
 
-          {/* Defending types hidden until revealed */}
           {revealDefTypes ? (
             <p className="text-lg">
               Defending Types:{" "}
@@ -136,12 +134,8 @@ export default function GamePage() {
 
       {choice && result && (
         <div className="mt-6 text-xl">
-          <p>
-            You chose: <span className="font-semibold">{choice}</span>
-          </p>
-          <p>
-            Correct answer: <span className="font-semibold">{result}</span>
-          </p>
+          <p>You chose: <span className="font-semibold">{choice}</span></p>
+          <p>Correct answer: <span className="font-semibold">{result}</span></p>
           {choice === result ? (
             <p className="text-green-600 font-bold mt-2">✅ Correct! +1 point</p>
           ) : (
