@@ -1,6 +1,6 @@
 "use client";
 import { useEffect, useState } from "react";
-import type { Pokemon } from "../components/pokemon";
+import type { Pokemon } from "../../components/pokemon";
 
 export default function PokedexPage() {
   const [pokemon, setPokemon] = useState<Pokemon | null>(null);

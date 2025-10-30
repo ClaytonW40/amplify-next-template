@@ -1,8 +1,8 @@
 "use client";
 import { useEffect, useState } from "react";
 import Link from "next/link";
-import type { Pokemon, Move } from "../components/pokemon";
-import { checkEffectiveness, Effectiveness } from "../components/checkEffectiveness";
+import type { Pokemon, Move } from "../../components/pokemon";
+import { checkEffectiveness, Effectiveness } from "../../components/checkEffectiveness";
 
 export default function GamePage() {
   const [pokemon, setPokemon] = useState<Pokemon | null>(null);
@@ -66,7 +66,7 @@ export default function GamePage() {
       <p className="mb-2 text-xl">Score: <strong>{score}</strong></p>
 
       {}
-      <Link href="/pokedex">
+      <Link href="app/pokedex">
         <button className="mb-6 px-4 py-2 bg-purple-500 text-white rounded hover:bg-purple-600">
           Go to Pokédex
         </button>
